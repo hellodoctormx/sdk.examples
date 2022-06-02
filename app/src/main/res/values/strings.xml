@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">FoodPass</string>
+    <string name="video_calls_channel">Videollamadas</string>
+    <string name="video_calls_channel_description">Notificaciónes de videollamadas</string>
+    <string name="video_calls_default_channel_id">incoming_video_call</string>
+</resources>
