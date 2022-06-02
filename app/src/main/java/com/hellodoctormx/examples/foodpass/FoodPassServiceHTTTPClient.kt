@@ -2,23 +2,25 @@ package com.hellodoctormx.examples.foodpass
 
 import android.content.Context
 import android.util.Log
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
 import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
 
-
-const val DEMO_SERVICE_HOST = "https://third-party-demo-service-3o7jotw3dq-uc.a.run.app"
-
 abstract class FoodPassServiceHTTTPClient(val context: Context) {
     val tag = "FoodPassServiceHTTTPClient"
+    val serviceHost: String = dotenv.get("SERVICE_HOST")
 
     suspend inline fun <reified T> get(path: String): T {
         return doRequest(Request.Method.GET, path, null)
@@ -41,58 +43,66 @@ abstract class FoodPassServiceHTTTPClient(val context: Context) {
         path: String,
         data: MutableMap<Any, Any>?
     ): T = withContext(Dispatchers.IO) {
-        val responseChannel = Channel<String>()
+        val url = "${serviceHost}$path"
+        Log.d(tag, "[doRequest:$method:$url]")
+        val responseChannel = Channel<String?>()
 
-        val url = "${DEMO_SERVICE_HOST}$path"
+        val jsonPostData = if (data == null) JSONObject() else JSONObject(data as Map<Any, Any>)
 
-        val asyncRequest = async(Dispatchers.IO) {
-            val jsonPostData = if (data == null) JSONObject() else JSONObject(data as Map<Any, Any>)
-
-            val jsonObjectRequest = object : JsonObjectRequest(
-                method,
-                url,
-                jsonPostData,
-                { jsonObjectResponse ->
-                    launch(Dispatchers.IO) {
-                        responseChannel.send(jsonObjectResponse.toString())
-                        responseChannel.close()
-                    }
-                },
-                {
-                    Log.w(tag, "[doRequest:$method:$url:ERROR] ${it.message}")
-                    throw it
+        val jsonObjectRequest = object : JsonObjectRequest(
+            method,
+            url,
+            jsonPostData,
+            Response.Listener {
+                launch {
+                    responseChannel.send(it.toString())
+                    responseChannel.close()
                 }
-            ) {
-                override fun getHeaders(): MutableMap<String, String> {
-                    return getAuthorizationHeaders()
-                }
+            },
+            Response.ErrorListener { error ->
+                responseChannel.close(error)
             }
-
-            with(Volley.newRequestQueue(context)) {
-                add(jsonObjectRequest)
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                return getAuthorizationHeaders()
             }
-
-            responseChannel.receive()
         }
 
-        val rawResponse = asyncRequest.await()
+        with(jsonObjectRequest) {
+            retryPolicy = DefaultRetryPolicy(5000, 0, DEFAULT_BACKOFF_MULT)
 
-        return@withContext Json.decodeFromString(rawResponse)
+            Volley.newRequestQueue(context).add(this)
+        }
+
+        val rawResponse = responseChannel.receive()
+
+        return@withContext Json.decodeFromString(rawResponse!!)
     }
 
     fun getAuthorizationHeaders(): MutableMap<String, String> {
         val headers = HashMap<String, String>()
         headers["Content-Type"] = "application/json"
-        headers["X-Api-Key"] = THIRD_PARTY_DEMO_API_KEY
+        headers["X-Api-Key"] = dotenv.get("API_KEY")
 
-        currentUserJWT?.let {
+        getCurrentUserJWT()?.let {
             headers["Authorization"] = "Bearer $it"
         }
 
         return headers
     }
 
-    companion object {
-        var currentUserJWT: String? = null
+    private fun getCurrentUserJWT(): String? = runBlocking {
+        val currentUser = FirebaseAuth.getInstance().currentUser ?: return@runBlocking null
+
+        val getTokenChannel = Channel<String?>()
+
+        currentUser.getIdToken(false).addOnCompleteListener {
+            runBlocking {
+                getTokenChannel.send(it.result.token)
+                getTokenChannel.close()
+            }
+        }
+
+        return@runBlocking getTokenChannel.receive()
     }
 }

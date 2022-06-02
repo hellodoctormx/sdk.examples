@@ -16,8 +16,19 @@ class FoodPassServiceAPI(context: Context) : FoodPassServiceHTTTPClient(context)
     }
 
     @Serializable
-    data class GetHelloDoctorUserResponse(val uid: String, val authToken: String)
+    data class GetHelloDoctorUserResponse(
+        override val uid: String,
+        override val refreshToken: String
+    ) : HelloDoctorUserResponse
 
     @Serializable
-    data class CreateHelloDoctorUserResponse(val uid: String, val authToken: String)
+    data class CreateHelloDoctorUserResponse(
+        override val uid: String,
+        override val refreshToken: String
+    ) : HelloDoctorUserResponse
+}
+
+interface HelloDoctorUserResponse {
+    val uid: String
+    val refreshToken: String
 }

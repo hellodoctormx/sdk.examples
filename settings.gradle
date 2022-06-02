@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ExampleIntegrationApp"
+rootProject.name = "examples-FoodPass"
 include ':app'
