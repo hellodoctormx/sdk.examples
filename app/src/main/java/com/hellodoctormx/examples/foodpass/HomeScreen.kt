@@ -34,14 +34,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hellodoctormx.sdk.api.ConsultationsAPI
+import com.hellodoctormx.sdk.services.ConsultationService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
+import java.time.temporal.TemporalAdjusters.*
+
 
 class AppViewModel : ViewModel() {
     var activeScreen by mutableStateOf("home")
@@ -56,12 +59,19 @@ class AppViewModel : ViewModel() {
 
         val specialty = activeSpecialty ?: return
         val requestedStart = selectedTime ?: return
-        val consultationsAPI = ConsultationsAPI(context)
+        val consultationService = ConsultationService(context)
 
         viewModelScope.launch {
-            consultationsAPI.requestCallCenterConsultation(
+            val monthStart = ZonedDateTime.now().withDayOfMonth(1)
+            val monthEnd = ZonedDateTime.now().with(lastDayOfMonth())
+
+            val getAvailabilityResponse = consultationService.getCallCenterAvailability(specialty, monthStart, monthEnd)
+
+            val nextAvailability = getAvailabilityResponse.availableTimes[0]
+
+            consultationService.requestCallCenterConsultation(
                 specialty,
-                requestedStart,
+                nextAvailability.interval.start,
                 "Any reason, whatever"
             )
 
