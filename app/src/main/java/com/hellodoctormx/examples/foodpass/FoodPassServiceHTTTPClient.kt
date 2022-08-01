@@ -69,7 +69,7 @@ abstract class FoodPassServiceHTTTPClient(val context: Context) {
         }
 
         with(jsonObjectRequest) {
-            retryPolicy = DefaultRetryPolicy(5000, 0, DEFAULT_BACKOFF_MULT)
+            retryPolicy = DefaultRetryPolicy(60000, 0, DEFAULT_BACKOFF_MULT)
 
             Volley.newRequestQueue(context).add(this)
         }

@@ -6,11 +6,23 @@ pluginManagement {
     }
 }
 
+def props = new Properties()
+file("gpr.properties").withInputStream { props.load(it) }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+
+        maven {
+            url = uri("https://maven.pkg.github.com/hellodoctormx/sdk.android")
+            credentials {
+                username = props.getProperty("gpr.user")
+                password = props.getProperty("gpr.key")
+            }
+        }
+
         mavenLocal() {
             metadataSources {
                 mavenPom()

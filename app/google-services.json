@@ -1,140 +1,34 @@
 {
   "project_info": {
-    "project_number": "24316860364",
-    "project_id": "hellodoctor-production-303000",
-    "storage_bucket": "hellodoctor-production-303000.appspot.com"
+    "project_number": "144020829928",
+    "project_id": "example-third-party",
+    "storage_bucket": "example-third-party.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:24316860364:android:9c9ec7a8707abbc0772f69",
+        "mobilesdk_app_id": "1:144020829928:android:7114ee52b8d8a108f63b5d",
         "android_client_info": {
           "package_name": "com.hellodoctormx.examples.foodpass"
         }
       },
       "oauth_client": [
         {
-          "client_id": "24316860364-l255hevoitcoues3t6tsufn5gqlc3hkq.apps.googleusercontent.com",
+          "client_id": "144020829928-6m0j2bid0rlbnbhbkd91llj7gt8ja760.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBH6PjocNxjuVhS4S3sWFwwtyULsqFn3Ug"
+          "current_key": "AIzaSyD-pmxtS2H3tGPY3_najrizsKcgwlxmLoA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "24316860364-777lm0d25l1o12u5m36p1870uuk57tpn.apps.googleusercontent.com",
+              "client_id": "144020829928-6m0j2bid0rlbnbhbkd91llj7gt8ja760.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "24316860364-291qh4vsd3su73etcj16l7c4tgnkmb0u.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.hellodoctormx.practitioner",
-                "app_store_id": "1530147596"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:24316860364:android:95a3cbb3e12b2c90772f69",
-        "android_client_info": {
-          "package_name": "com.hellodoctormx.patient"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "24316860364-tpr69g7vthqbmse9v3gjk54sle5cnh1n.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hellodoctormx.patient",
-            "certificate_hash": "0ed892ff3f5662a8dd14b21c51d5066e47eff9d8"
-          }
-        },
-        {
-          "client_id": "24316860364-l255hevoitcoues3t6tsufn5gqlc3hkq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBH6PjocNxjuVhS4S3sWFwwtyULsqFn3Ug"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "24316860364-777lm0d25l1o12u5m36p1870uuk57tpn.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "24316860364-291qh4vsd3su73etcj16l7c4tgnkmb0u.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.hellodoctormx.practitioner",
-                "app_store_id": "1530147596"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:24316860364:android:8253d67eb0b36488772f69",
-        "android_client_info": {
-          "package_name": "com.hellodoctormx.practitioner"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "24316860364-5460b9751rr59j1jjf2n9ntr05r6nge8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hellodoctormx.practitioner",
-            "certificate_hash": "dd260c49f8e87b22980df57a7ae536469e6f45e8"
-          }
-        },
-        {
-          "client_id": "24316860364-sq5hkoot1fucojgp4kov18jud34gj5of.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hellodoctormx.practitioner",
-            "certificate_hash": "e697b780c5a4e0ba41ce0cd8c1e5689eada1159a"
-          }
-        },
-        {
-          "client_id": "24316860364-l255hevoitcoues3t6tsufn5gqlc3hkq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBH6PjocNxjuVhS4S3sWFwwtyULsqFn3Ug"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "24316860364-777lm0d25l1o12u5m36p1870uuk57tpn.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "24316860364-291qh4vsd3su73etcj16l7c4tgnkmb0u.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.hellodoctormx.practitioner",
-                "app_store_id": "1530147596"
-              }
             }
           ]
         }

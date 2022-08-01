@@ -75,7 +75,7 @@ class FoodPassFirebaseMessagingService: FirebaseMessagingService() {
                     return@addOnCompleteListener
                 }
 
-                val documentUpdate = mapOf("thirdPartyDeviceToken" to it.result)
+                val documentUpdate = mapOf("fcmToken" to it.result)
 
                 Firebase.firestore
                     .document("users/${currentUser.uid}")

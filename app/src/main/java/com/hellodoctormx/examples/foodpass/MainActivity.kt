@@ -3,10 +3,12 @@ package com.hellodoctormx.examples.foodpass
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.hellodoctormx.examples.foodpass.ui.theme.FoodPassTheme
 import io.github.cdimascio.dotenv.dotenv
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +29,9 @@ class MainActivity : ComponentActivity() {
         auth = Firebase.auth
 
         setContent {
-            HomeScreen(HomeScreenViewModel())
+            MaterialTheme {
+                RappiApp(AppViewModel())
+            }
         }
     }
 
@@ -47,8 +51,8 @@ class MainActivity : ComponentActivity() {
         }
 
         if (auth.currentUser == null) {
-//            auth.signInWithEmailAndPassword("demo.patient@hellodoctor.mx", "AnyColourYouLike")
-            auth.signInWithEmailAndPassword("fatisar@gmail.com", "Fati8123")
+            auth.signInWithEmailAndPassword("demo.patient@hellodoctor.mx", "AnyColourYouLike")
+//            auth.signInWithEmailAndPassword("fatisar@gmail.com", "Fati8123")
         }
     }
 }
