@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "144020829928",
+    "project_id": "example-third-party",
+    "storage_bucket": "example-third-party.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144020829928:android:7114ee52b8d8a108f63b5d",
+        "android_client_info": {
+          "package_name": "com.hellodoctormx.examples.foodpass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144020829928-6m0j2bid0rlbnbhbkd91llj7gt8ja760.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-pmxtS2H3tGPY3_najrizsKcgwlxmLoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144020829928-6m0j2bid0rlbnbhbkd91llj7gt8ja760.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "144020829928-pu0o1rk9epnngt152gqj41fnchvtm4bf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rnhellodoctorexampleapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144020829928:android:6a2628756cf32d5cf63b5d",
+        "android_client_info": {
+          "package_name": "com.rnhellodoctorexampleapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144020829928-6m0j2bid0rlbnbhbkd91llj7gt8ja760.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-pmxtS2H3tGPY3_najrizsKcgwlxmLoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144020829928-6m0j2bid0rlbnbhbkd91llj7gt8ja760.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "144020829928-pu0o1rk9epnngt152gqj41fnchvtm4bf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rnhellodoctorexampleapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
