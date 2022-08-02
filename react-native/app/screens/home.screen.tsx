@@ -9,12 +9,12 @@ type HomeScreenProps = {
 
 export default function HomeScreen(props: HomeScreenProps): Node {
     return (
-        <SafeAreaView style={{backgroundColor: ThemeColors.ScreenBackground}}>
-            <View style={{flex: 1, backgroundColor: ThemeColors.ScreenBackground, padding: 18}}>
-                <Text style={{fontFamily: ThemeFonts.TextTitle, fontSize: 20, color: ThemeColors.TextMain}}>
+        <View style={{flex: 1, backgroundColor: ThemeColors.ScreenBackground, padding: 18}}>
+            <View style={{borderWidth: 1}}>
+                <Text style={{fontFamily: ThemeFonts.TextRegular, fontSize: 20, color: ThemeColors.TextMain}}>
                     Welcome to the HelloDoctor React Native Example App
                 </Text>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }

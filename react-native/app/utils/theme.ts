@@ -26,10 +26,10 @@ export const ThemeColors = {
 };
 
 export const ThemeFonts = {
-    TextRegular: 'Roboto',
-    TextSemiBold: 'Roboto',
-    TextBold: 'Roboto',
-    TextTitle: 'Roboto',
+    TextRegular: 'Nunito-Regular',
+    TextSemiBold: 'Nunito-SemiBold',
+    TextBold: 'Nunito-Bold',
+    TextTitle: 'Nunito-Black',
 };
 
 export function alpha(color: string, alphaAmount: number): string {

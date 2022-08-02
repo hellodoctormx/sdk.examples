@@ -2,8 +2,6 @@ import auth from '@react-native-firebase/auth';
 import firestore, {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
 
-import CollectionReference = FirebaseFirestoreTypes.CollectionReference;
-
 import {UserDevice} from '../types';
 
 export async function registerDevice() {
@@ -41,7 +39,7 @@ async function doRegisterDevice() {
 export async function getDeviceSnapshot() {
     const {currentUser} = auth();
 
-    if (currentUser === undefined) {
+    if (currentUser === null) {
         throw 'unauthenticated_error';
     }
 
@@ -64,6 +62,6 @@ export async function getDeviceSnapshot() {
     return deviceQuerySnapshot.docs[0];
 }
 
-function getCurrentUserDevicesRef(): CollectionReference<UserDevice> {
+function getCurrentUserDevicesRef(): FirebaseFirestoreTypes.CollectionReference<UserDevice> {
     return firestore().collection(`users/${auth().currentUser.uid}/devices`);
 }
