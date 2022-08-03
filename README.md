@@ -1,4 +1,5 @@
-**Integration Metadata**
+### Integration Metadata
+```
 type=app
 name=
 domain=
@@ -6,14 +7,9 @@ webhookURL=
 apiKey=
 apiSecret=
 ghpToken=
+```
 
-Good morning everybody. 
-
-I still have to update a bit of the documentation to reflect the React Native implementation route, but the rest of your integration setup is ready for you.
-
-For the developers among you, here's the instructions to get the example app up and running:
-
-```shell
+```bash
 $ git clone https://github.com/hellodoctormx/sdk.examples.git
 
 $ cd sdk.examples/react-native
@@ -31,9 +27,6 @@ gpr.key=
 
 $ yarn android
 ```
-
-For the non-developers among you, I'm also uploading an APK that you should be able to install directly onto your Android phones (note that iOS is, at present, not yet working on account of some additional server setup on our demo server, that I did not get around to yet. Soon, though.)
-
 
 A quick tutorial for the example app -
 
