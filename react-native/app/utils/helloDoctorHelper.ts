@@ -1,5 +1,4 @@
-import {NativeModules, Platform} from 'react-native';
-import auth from '@react-native-firebase/auth';
+import {Platform} from 'react-native';
 import {RNHelloDoctor} from '@hellodoctor/react-native-sdk';
 import notifee from '@notifee/react-native';
 
@@ -9,29 +8,18 @@ import * as rootNavigation from './navigation';
 import {navigateToHome} from './navigation';
 import {setInitialNavigation} from '../notifications';
 import {getDeviceSnapshot} from './device';
-
-// import DocumentRef
-const {RNHelloDoctorModule} = NativeModules;
-
-const HELLO_DOCTOR_API_KEY = '';
+import {getCurrentUser} from '../services/user.service';
+import {API_KEY, HELLO_DOCTOR_API_HOST} from '../../app.config.js';
 
 let _didNavigateToVideoCall = false;
 
 export async function configureHelloDoctorSDK(): Promise<void> {
-    const {currentUser} = auth();
-
-    if (!currentUser) {
-        console.warn(
-            '[configureHelloDoctorSDK] not bootstrapping: no logged in user',
-        );
-        return;
-    }
-
-    const currentUserJWT = await currentUser.getIdToken();
+    const currentUser = getCurrentUser();
 
     const config = {
-        apiKey: HELLO_DOCTOR_API_KEY,
+        apiKey: API_KEY,
         appName: appName,
+        serviceHost: HELLO_DOCTOR_API_HOST,
         onAnswerCall: navigateToVideoCall,
         onEndCall: navigateToHome,
         ios: {
@@ -39,15 +27,8 @@ export async function configureHelloDoctorSDK(): Promise<void> {
         },
     };
 
-    if (Platform.OS === 'android') {
-        await RNHelloDoctorModule.signInWithJWT(currentUser.uid, currentUserJWT);
-        await RNHelloDoctor.configure(config).catch(error =>
-            console.error('[RNHelloDoctor.configure]', error),
-        );
-    } else {
-        await RNHelloDoctor.configure(config);
-        await RNHelloDoctor.signInWithJWT(currentUser.uid, currentUserJWT);
-    }
+    await RNHelloDoctor.configure(config);
+    await RNHelloDoctor.signIn(currentUser.helloDoctorUserID, currentUser.refreshToken);
 }
 
 async function registerPushKitToken(token: string): Promise<void> {
