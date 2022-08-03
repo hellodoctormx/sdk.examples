@@ -1,9 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import {API_HOST} from '../../app.config.js';
 
-export default class Http {
-    static API_KEY: string = '';
-
+export default class ExampleAppHTTPClient {
     async get(path: string) {
         return this.doRequest(path, 'GET');
     }
@@ -44,10 +42,6 @@ export default class Http {
         if (currentUser !== undefined) {
             requestHeaders.Authorization = `Bearer ${await currentUser.getIdToken()}`;
             requestHeaders['X-User-UID'] = currentUser.uid;
-        }
-
-        if (Http.API_KEY) {
-            requestHeaders['X-Api-Key'] = Http.API_KEY;
         }
 
         return requestHeaders;

@@ -22,5 +22,16 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+        <activity
+            android:name="com.hellodoctormx.sdk.video.IncomingVideoCallActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.hellodoctormx.sdk.action.INCOMING_VIDEO_CALL_ANSWERED" />
+                <action android:name="com.hellodoctormx.sdk.action.INCOMING_VIDEO_CALL_FULLSCREEN" />
+                <action android:name="com.hellodoctormx.sdk.action.INCOMING_VIDEO_CALL_REJECTED" />
+                <action android:name="com.hellodoctormx.sdk.action.INCOMING_VIDEO_CALL_ENDED" />
+            </intent-filter>
+        </activity>
+        <service android:name="com.hellodoctormx.reactnative.RNHelloDoctorIncomingVideoCallService"/>
     </application>
 </manifest>

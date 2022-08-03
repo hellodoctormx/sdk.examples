@@ -1,4 +1,4 @@
-export const AppColors = {
+export const HelloDoctorColors = {
     Blue100: '#b5ddff',
     Blue300: '#0A6FC2',
     Blue500: '#096FC3',
@@ -20,12 +20,14 @@ export const AppColors = {
 };
 
 export const ThemeColors = {
-    TextMain: AppColors.Gray900,
-    TextSecondary: AppColors.Gray500,
-    ScreenBackground: AppColors.Gray100,
+    TextMain: HelloDoctorColors.Gray900,
+    TextSecondary: HelloDoctorColors.Gray500,
+    ScreenBackground: HelloDoctorColors.Gray100,
+    GoodAction: HelloDoctorColors.Green500,
+    BadAction: HelloDoctorColors.Red500,
 };
 
-export const ThemeFonts = {
+export const HelloDoctorFonts = {
     TextRegular: 'Nunito-Regular',
     TextSemiBold: 'Nunito-SemiBold',
     TextBold: 'Nunito-Bold',
