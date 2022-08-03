@@ -3,6 +3,10 @@ import firestore from '@react-native-firebase/firestore';
 
 import {CurrentUser} from '../types';
 import ExampleAppHTTPClient from './http.service';
+import {registerDevice} from '../utils/device';
+import {configureHelloDoctorSDK} from '../utils/helloDoctorHelper';
+import {bootstrapNotifications} from '../notifications';
+import messaging from '@react-native-firebase/messaging';
 
 let currentUser: CurrentUser;
 
@@ -24,6 +28,23 @@ export async function signIn(): Promise<CurrentUser> {
         await firestore().doc(`users/${auth().currentUser.uid}`).set({username: demoEmailAddress, createdTime: new Date()});
     }
 
+    return new Promise(resolve => {
+        const unsubscribe = auth().onAuthStateChanged((user) => {
+            if (user !== null) {
+                bootstrapUser().then(resolve).finally(unsubscribe);
+            }
+        });
+    });
+}
+
+async function bootstrapUser(): Promise<CurrentUser> {
+    const status = await messaging().hasPermission();
+
+    if (status !== messaging.AuthorizationStatus.AUTHORIZED) {
+        await messaging().requestPermission();
+    }
+
+    console.debug('[bootstrapUser]', auth().currentUser);
     let helloDoctorUser;
 
     try {
@@ -38,6 +59,12 @@ export async function signIn(): Promise<CurrentUser> {
         helloDoctorUserID: helloDoctorUser.uid,
         refreshToken: helloDoctorUser.refreshToken,
     };
+
+    await registerDevice();
+
+    await configureHelloDoctorSDK();
+
+    bootstrapNotifications();
 
     return currentUser;
 }

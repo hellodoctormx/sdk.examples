@@ -71,7 +71,9 @@ function HomeScreen(): ReactElement {
     function doSignIn() {
         setIsSigningIn(true);
 
-        signIn().finally(() => setIsSigningIn(false));
+        signIn()
+            .then(setCurrentUser)
+            .finally(() => setIsSigningIn(false));
     }
 
     function doSignOut() {
@@ -104,8 +106,8 @@ function HomeScreen(): ReactElement {
                 />
             )}
             <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 128}}>
-                {currentUser === undefined && <Button label={'Sign in'} onPress={doSignIn} color={HelloDoctorColors.Blue500} loading={isSigningIn} style={{marginTop: 36}}/>}
-                {currentUser !== undefined && <Button label={'Sign out'} onPress={doSignOut} color={HelloDoctorColors.Red500} disabled={isSigningIn} style={{marginTop: 36}}/>}
+                {currentUser === undefined && <Button label={'Create account'} onPress={doSignIn} color={HelloDoctorColors.Blue500} loading={isSigningIn} style={{marginTop: 36}}/>}
+                {currentUser !== undefined && <Button label={'Sign out'} onPress={doSignOut} color={HelloDoctorColors.Red500} style={{marginTop: 36}}/>}
             </View>
         </View>
     );

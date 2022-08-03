@@ -31,8 +31,6 @@ export default function App(): ReactElement {
     const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
     useEffect(() => {
-        bootstrapApp(setCurrentUser).catch((error) => console.error('[App:useEffect:bootstrapApp]', error));
-
         return () => {
             teardownApp().catch((error) => console.error('[App:useEffect:teardownApp]', error));
         };
@@ -47,33 +45,6 @@ export default function App(): ReactElement {
             </CurrentUserContext.Provider>
         </NavigationContainer>
     );
-}
-
-async function bootstrapApp(setCurrentUser: (currentUser: CurrentUser) => void) {
-    const status = await messaging().hasPermission();
-
-    if (status !== messaging.AuthorizationStatus.AUTHORIZED) {
-        await messaging().requestPermission();
-    }
-
-    auth().onAuthStateChanged(async (currentAuthUser) => {
-        console.debug('[auth().onAuthStateChanged]', currentAuthUser);
-
-        if (currentAuthUser === null) {
-            setCurrentUser(undefined);
-            return;
-        }
-
-        await signIn();
-
-        await registerDevice();
-
-        await configureHelloDoctorSDK();
-
-        bootstrapNotifications();
-        console.debug("BOOTSTRAP setting current user from", getCurrentUser())
-        setCurrentUser(getCurrentUser());
-    });
 }
 
 async function teardownApp() {
