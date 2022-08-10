@@ -7,8 +7,6 @@ platform :ios, deployment_target
 
 production = ENV["PRODUCTION"] == "1"
 
-use_frameworks! :linkage => :static
-
 target 'RNHelloDoctorExampleApp' do
   config = use_native_modules!
   
@@ -18,13 +16,6 @@ target 'RNHelloDoctorExampleApp' do
       :hermes_enabled => false
     )
 
-    pod 'FirebaseAuth'
-    pod 'FirebaseFirestore'
-    pod 'FirebaseMessaging'
-
-    pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
-    pod 'RCT-Folly', :podspec => '../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec', :modular_headers => false
-  
     target 'RNHelloDoctorExampleAppTests' do
       inherit! :complete
       # Pods for testing

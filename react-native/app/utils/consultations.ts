@@ -1,6 +1,6 @@
 import {Consultation} from '@hellodoctor/react-native-sdk/lib/types';
 import moment from 'moment';
-import {HelloDoctorColors} from './theme';
+import {HelloDoctorColors} from '../../../../react-native/lib/ui/theme';
 import _ from 'lodash';
 
 export type ConsultationNotice = {

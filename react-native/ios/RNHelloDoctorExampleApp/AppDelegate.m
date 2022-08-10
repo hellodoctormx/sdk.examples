@@ -11,20 +11,10 @@
 #import <React/RCTBridgeDelegate.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import <GoogleMaps/GoogleMaps.h>
 #import <PushKit/PushKit.h>
-
-#import <ZendeskCoreSDK/ZendeskCoreSDK.h>
-#import <SupportProvidersSDK/SupportProvidersSDK.h>
 
 #import "RNCallKeep.h"
 #import "RNVoipPushNotificationManager.h"
-
-#import "Orientation.h"
-
-#import "ReactNativeConfig.h"
-
-#import "CryptoModule.h"
 
 @implementation AppDelegate
 
@@ -57,6 +47,7 @@
     UIViewController *rootViewController = [UIViewController new];
     rootViewController.view = rootView;
     self.window.rootViewController = rootViewController;
+    [self.window makeKeyAndVisible];
     
     return YES;
 }
@@ -65,16 +56,10 @@
 {
 #if DEBUG
     return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+//    return [NSURL URLWithString:@"http://192.168.100.26:8081/index.bundle?platform=ios"];
 #else
     return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
-}
-
-- (NSArray *)extraModulesForBridge:(RCTBridge *)bridge
-{
-    return @[
-        [[CryptoModule alloc] init]
-    ];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -100,12 +85,6 @@
   NSLog(@"Unable to register for remote notifications: %@", error);
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> *restorableObjects))restorationHandler {
-   return [RNCallKeep application:application
-            continueUserActivity:userActivity
-              restorationHandler:restorationHandler];
- }
-
 - (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials:(PKPushCredentials *)credentials forType:(PKPushType)type {
     [RNHelloDoctorVideo pushRegistry:registry didUpdatePushCredentials:credentials forType:type];
 }
@@ -116,10 +95,6 @@
 
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void (^)(void))completion {
     [RNHelloDoctorVideo pushRegistry:registry didReceiveIncomingPushWithPayload:payload forType:type withCompletionHandler:completion];
-}
-
-- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    return [Orientation getOrientation];
 }
 
 @end

@@ -15,6 +15,7 @@ export function getCurrentUser() {
 }
 
 export async function signIn(): Promise<CurrentUser> {
+    console.debug("SIGN IN", auth().currentUser?.uid);
     if (currentUser !== undefined) {
         return;
     }
@@ -37,7 +38,7 @@ export async function signIn(): Promise<CurrentUser> {
     });
 }
 
-async function bootstrapUser(): Promise<CurrentUser> {
+export async function bootstrapUser(): Promise<CurrentUser> {
     const status = await messaging().hasPermission();
 
     if (status !== messaging.AuthorizationStatus.AUTHORIZED) {

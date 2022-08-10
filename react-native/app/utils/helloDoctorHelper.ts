@@ -8,14 +8,14 @@ import * as rootNavigation from './navigation';
 import {navigateToHome} from './navigation';
 import {setInitialNavigation} from '../notifications';
 import {getDeviceSnapshot} from './device';
-import {getCurrentUser} from '../services/user.service';
+import {bootstrapUser, getCurrentUser} from '../services/user.service';
 import {API_KEY, HELLO_DOCTOR_API_HOST} from '../../app.config.js';
 
 let _didNavigateToVideoCall = false;
 
 export async function configureHelloDoctorSDK(): Promise<void> {
     const currentUser = getCurrentUser();
-
+    console.debug("[configureHelloDoctorSDK]", {currentUser});
     const config = {
         apiKey: API_KEY,
         appName: appName,
@@ -45,7 +45,8 @@ export async function handleIncomingVideoCallNotification(
     consultationID: string,
 ) {
     if (Platform.OS === 'android') {
-        await configureHelloDoctorSDK();
+        await bootstrapUser();
+
         await RNHelloDoctor.handleIncomingVideoCallNotification({
             videoRoomSID,
             callerDisplayName,

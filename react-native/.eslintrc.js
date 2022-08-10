@@ -13,5 +13,6 @@ module.exports = {
         'react-native/no-inline-styles': 0,
         '@typescript-eslint/no-namespace': 0,
         'react-hooks/exhaustive-deps': 0,
+        '@typescript-eslint/ban-ts-comment': 0,
     },
 };

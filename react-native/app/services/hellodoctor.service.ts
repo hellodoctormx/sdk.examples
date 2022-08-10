@@ -1,5 +1,5 @@
 import {RNHelloDoctor} from '@hellodoctor/react-native-sdk';
-import {SchedulingAvailability, Consultation} from '@hellodoctor/react-native-sdk/lib/types';
+import {SchedulingAvailability, Consultation} from '@hellodoctor/react-native-sdk/dist/types';
 
 export namespace HelloDoctorService {
     export function getAvailability(requestMode: string, specialty: string, startTime: Date, endTime: Date): Promise<Array<SchedulingAvailability>> {
