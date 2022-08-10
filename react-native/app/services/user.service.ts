@@ -15,7 +15,6 @@ export function getCurrentUser() {
 }
 
 export async function signIn(): Promise<CurrentUser> {
-    console.debug("SIGN IN", auth().currentUser?.uid);
     if (currentUser !== undefined) {
         return;
     }
