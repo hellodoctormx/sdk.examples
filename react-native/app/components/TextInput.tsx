@@ -1,6 +1,17 @@
 import _ from 'lodash';
-import React from 'react';
-import {Animated, Text, TextInput as ReactNativeTextInput, TouchableOpacity, View} from 'react-native';
+import React, {ReactElement, useEffect, useRef, useState} from 'react';
+import {
+    Animated,
+    NativeSyntheticEvent,
+    ScrollView,
+    StyleProp,
+    Text,
+    TextInput as RNTextInput,
+    TextInputFocusEventData,
+    TextInputProps as RNTextInputProps,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import HideableView from './HideableView';
 // import Icon from 'react-native-vector-icons/FontAwesome5';
 import CollapsibleView from './CollapsibleView';
@@ -8,41 +19,43 @@ import {alpha, HelloDoctorColors, HelloDoctorFonts} from '../utils/theme';
 
 export const defaultTextInputBorderColor = alpha(HelloDoctorColors.Gray500, 0.3);
 
-export default function TextInput(props) {
-    const [borderColorOverride, setShadowColorOverride] = React.useState(null);
-    const [value, setValue] = React.useState(props.value);
-    const [isFocused, setIsFocused] = React.useState(false);
+type TextInputProps = RNTextInputProps & {
+    forwardRef: (_ref: RNTextInput) => void
+    scrollRef?: ScrollView
+    scrollMarginTop?: number
+    label?: string
+    placeholder?: string
+    icon?: string
+    isHidden?: boolean
+    required?: boolean
+    disabled?: boolean
+    loading?: boolean
+    display?: 'none' | undefined
+    minLength?: number
+    hasError?: boolean
+    onPress?: () => void
+    containerStyle?: StyleProp<unknown>
+    labelStyle?: StyleProp<unknown>
+}
 
-    const shadowRadiusRef = React.useRef(new Animated.Value(0));
-    const shadowHeightRef = React.useRef(new Animated.Value(0));
-    const shadowOpacityRef = React.useRef(new Animated.Value(0));
-    const labelOpacityRef = React.useRef(new Animated.Value(1));
+export default function TextInput(props: TextInputProps): ReactElement {
+    const [value, setValue] = useState(props.value);
 
-    const containerRef = React.useRef({});
-    const layoutRef = React.useRef({});
-    const inputRef = React.useRef({});
+    const shadowRadiusRef = useRef(new Animated.Value(0));
+    const shadowHeightRef = useRef(new Animated.Value(0));
+    const shadowOpacityRef = useRef(new Animated.Value(0));
+    const labelOpacityRef = useRef(new Animated.Value(1));
+
+    const containerRef = useRef<TouchableOpacity>();
+    const layoutRef = useRef({});
+    const inputRef = useRef<RNTextInput>();
 
     const isValid = props.minLength && props.required ? _.size(value) >= props.minLength
         : props.minLength ? _.isEmpty(value) || _.size(value) >= props.minLength
             : props.required ? !_.isEmpty(value)
                 : true;
 
-    React.useEffect(() => {
-        if (props.hasError || !isValid) {
-            setShadowColorOverride(HelloDoctorColors.Red300);
-            doFocusAnimation();
-        } else {
-            setShadowColorOverride(null);
-        }
-    }, [props.hasError]);
-
-    React.useEffect(() => {
-        if (props.required || !isValid) {
-            setShadowColorOverride(HelloDoctorColors.Red300);
-        }
-    }, [value]);
-
-    React.useEffect(() => {
+    useEffect(() => {
         setValue(props.value);
     }, [props.value]);
 
@@ -60,32 +73,32 @@ export default function TextInput(props) {
         Animated.timing(labelOpacityRef.current, {toValue: 1, duration: 300, useNativeDriver: true}),
     ]).start();
 
-    const handleOnChangeText = value => {
+    function handleOnChangeText() {
         setValue(value);
         props.onChangeText(value);
-    };
+    }
 
-    const handleOnFocus = () => {
-        setIsFocused(true);
-
+    const handleOnFocus = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
         doFocusAnimation();
 
         if (props.onFocus) {
-            props.onFocus();
+            props.onFocus(event);
         }
 
         if (!_.isEmpty(props.scrollRef)) {
             const scrollableNode = props.scrollRef.getScrollableNode();
 
-            if (containerRef.current && !containerRef.current.measureLayout) {
+            if (containerRef.current !== undefined && !containerRef.current.measureLayout) {
                 console.warn(`${props.label} is fucked up`, _.keys(containerRef.current));
             }
 
-            const doScroll = () => containerRef.current?.measureLayout(scrollableNode, (left, top, width, height) => {
+            const doScroll = () => containerRef.current?.measureLayout(scrollableNode, (left, top, _width, _height) => {
                 const scrollMarginTop = props.scrollMarginTop || 128;
                 const scrollToY = top - scrollMarginTop;
                 console.debug('scrollToY', scrollToY);
                 props.scrollRef.scrollTo({y: scrollToY});
+            }, () => {
+                console.warn('[TextInput:handleOnFocus:doScroll:FAILED]');
             });
 
             const tryScroll = () => containerRef.current?.measureLayout && doScroll();
@@ -95,17 +108,15 @@ export default function TextInput(props) {
         }
     };
 
-    const handleOnBlur = () => {
-        setIsFocused(false);
-
+    function handleOnBlur (event: NativeSyntheticEvent<TextInputFocusEventData>) {
         if (!props.hasError && isValid) {
             doBlurAnimation();
         }
 
         if (props.onBlur) {
-            props.onBlur();
+            props.onBlur(event);
         }
-    };
+    }
 
     const setInputRef = ref => {
         inputRef.current = props.editable !== false ? ref : {
@@ -138,8 +149,12 @@ export default function TextInput(props) {
     return props.isHidden ? null : (
         <TouchableOpacity
             onPress={handleOnPress}
-            ref={ref => containerRef.current = ref}
-            onLayout={({nativeEvent}) => layoutRef.current = nativeEvent.layout}
+            ref={(ref) => {
+                containerRef.current = ref;
+            }}
+            onLayout={({nativeEvent}) => {
+                layoutRef.current = nativeEvent.layout;
+            }}
             style={{
                 padding: 3,
                 paddingLeft: 6,
@@ -150,17 +165,27 @@ export default function TextInput(props) {
                 borderRadius: 4,
                 backgroundColor: 'white',
                 borderColor: validityColor,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 ...props.containerStyle,
             }}>
             <HideableView isHidden={!props.label} style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Animated.Text style={{flex: 1, opacity: labelOpacityRef.current, fontSize: 13, fontFamily: HelloDoctorFonts.TextRegular, color: HelloDoctorColors.Gray500, ...props.labelStyle}}>
+                <Animated.Text style={{
+                    flex: 1, opacity:
+                    labelOpacityRef.current,
+                    fontSize: 13,
+                    fontFamily: HelloDoctorFonts.TextRegular,
+                    color: HelloDoctorColors.Gray500,
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    ...props.labelStyle,
+                }}>
                     {props.label}
                 </Animated.Text>
                 <Text style={{fontFamily: HelloDoctorFonts.TextBold, fontSize: 13, color: HelloDoctorColors.Red300}}>{requiredLabel}</Text>
             </HideableView>
-            {props.innerPlacement !== 'below-text' && props.children}
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <ReactNativeTextInput
+                <RNTextInput
                     testID={props.testID}
                     ref={setInputRef}
                     autoFocus={props.autoFocus}
@@ -192,6 +217,8 @@ export default function TextInput(props) {
                         fontFamily: HelloDoctorFonts.TextRegular,
                         fontSize: 17,
                         color: HelloDoctorColors.Blue700,
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         ...props.style,
                     }}/>
                 {/*<HideableView isHidden={!props.icon} style={{paddingRight: 6, paddingLeft: 6}}>*/}
@@ -203,7 +230,6 @@ export default function TextInput(props) {
                     </CollapsibleView>
                 </HideableView>
             </View>
-            {props.innerPlacement === 'below-text' && props.children}
         </TouchableOpacity>
     );
 }
