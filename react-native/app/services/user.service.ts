@@ -44,7 +44,6 @@ export async function bootstrapUser(): Promise<CurrentUser> {
         await messaging().requestPermission();
     }
 
-    console.debug('[bootstrapUser]', auth().currentUser);
     let helloDoctorUser;
 
     try {
