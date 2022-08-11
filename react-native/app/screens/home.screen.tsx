@@ -43,7 +43,7 @@ export default function HomeScreenProvider(): ReactElement {
 function HomeScreen(): ReactElement {
     const {currentUser, setCurrentUser} = useCurrentUserContext();
     const {consultations, setConsultations} = useHomeScreenContext();
-    console.debug('[HomeScreen]', {currentUser});
+
     const [isSigningIn, setIsSigningIn] = useState(false);
     const [isSchedulingConsultation, setIsSchedulingConsultation] = useState(true);
     const [didRequestConsultation, setDidRequestConsultation] = useState(false);

@@ -16,7 +16,7 @@ export function getCurrentUser() {
 
 export async function signIn(): Promise<CurrentUser> {
     if (currentUser !== undefined) {
-        return;
+        return currentUser;
     }
 
     if (auth().currentUser === null) {

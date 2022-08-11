@@ -87,7 +87,7 @@ export async function navigateToVideoCall(consultationID: string, videoRoomSID: 
 
     const accessToken = await RNHelloDoctor.getVideoCallAccessToken(videoRoomSID);
 
-    rootNavigation.navigate('VideoCallStack', {
+    rootNavigation.navigate('VideoCall', {
         consultationID,
         videoRoomSID,
         accessToken,

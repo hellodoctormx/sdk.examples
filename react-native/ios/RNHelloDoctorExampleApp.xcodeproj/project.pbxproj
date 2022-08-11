@@ -23,6 +23,11 @@
 		CD487B6728A3D3AD00465F5A /* Nunito-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD487B5F28A3D3AD00465F5A /* Nunito-Bold.ttf */; };
 		CD487B6828A3D3AD00465F5A /* Nunito-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD487B6028A3D3AD00465F5A /* Nunito-Light.ttf */; };
 		CD487B6A28A3D64C00465F5A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD487B6928A3D64B00465F5A /* GoogleService-Info.plist */; };
+		CDBDB17128A4FCDB007CF653 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDBDB16C28A4FCDB007CF653 /* FontAwesome5_Regular.ttf */; };
+		CDBDB17228A4FCDB007CF653 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDBDB16D28A4FCDB007CF653 /* FontAwesome5_Solid.ttf */; };
+		CDBDB17328A4FCDB007CF653 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDBDB16E28A4FCDB007CF653 /* FontAwesome5_Brands.ttf */; };
+		CDBDB17428A4FCDB007CF653 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDBDB16F28A4FCDB007CF653 /* MaterialCommunityIcons.ttf */; };
+		CDBDB17528A4FCDB007CF653 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDBDB17028A4FCDB007CF653 /* Ionicons.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +64,11 @@
 		CD487B5F28A3D3AD00465F5A /* Nunito-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-Bold.ttf"; sourceTree = "<group>"; };
 		CD487B6028A3D3AD00465F5A /* Nunito-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Nunito-Light.ttf"; path = "../../../../../patient/app/assets/fonts/Nunito-Light.ttf"; sourceTree = "<group>"; };
 		CD487B6928A3D64B00465F5A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CDBDB16C28A4FCDB007CF653 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		CDBDB16D28A4FCDB007CF653 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		CDBDB16E28A4FCDB007CF653 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		CDBDB16F28A4FCDB007CF653 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		CDBDB17028A4FCDB007CF653 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
 		CF1141C6D809EBF48FB84876 /* Pods-RNHelloDoctorExampleApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNHelloDoctorExampleApp.debug.xcconfig"; path = "Target Support Files/Pods-RNHelloDoctorExampleApp/Pods-RNHelloDoctorExampleApp.debug.xcconfig"; sourceTree = "<group>"; };
 		D3590B93BBFB3EF6489C2C1A /* Pods-RNHelloDoctorExampleApp-RNHelloDoctorExampleAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNHelloDoctorExampleApp-RNHelloDoctorExampleAppTests.debug.xcconfig"; path = "Target Support Files/Pods-RNHelloDoctorExampleApp-RNHelloDoctorExampleAppTests/Pods-RNHelloDoctorExampleApp-RNHelloDoctorExampleAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DD8EBCCAF2BBF416C9BEEA24 /* Pods-RNHelloDoctorExampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNHelloDoctorExampleApp.release.xcconfig"; path = "Target Support Files/Pods-RNHelloDoctorExampleApp/Pods-RNHelloDoctorExampleApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -173,6 +183,11 @@
 		CD487B5228A3D37200465F5A /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				CDBDB16E28A4FCDB007CF653 /* FontAwesome5_Brands.ttf */,
+				CDBDB16C28A4FCDB007CF653 /* FontAwesome5_Regular.ttf */,
+				CDBDB16D28A4FCDB007CF653 /* FontAwesome5_Solid.ttf */,
+				CDBDB17028A4FCDB007CF653 /* Ionicons.ttf */,
+				CDBDB16F28A4FCDB007CF653 /* MaterialCommunityIcons.ttf */,
 				CD487B5B28A3D3AC00465F5A /* Nunito-Black.ttf */,
 				CD487B5F28A3D3AD00465F5A /* Nunito-Bold.ttf */,
 				CD487B5C28A3D3AC00465F5A /* Nunito-Italic.ttf */,
@@ -281,11 +296,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD487B6628A3D3AD00465F5A /* Nunito-Regular.ttf in Resources */,
+				CDBDB17428A4FCDB007CF653 /* MaterialCommunityIcons.ttf in Resources */,
 				CD487B6128A3D3AD00465F5A /* Nunito-SemiBold.ttf in Resources */,
 				CD487B6428A3D3AD00465F5A /* Nunito-Italic.ttf in Resources */,
+				CDBDB17228A4FCDB007CF653 /* FontAwesome5_Solid.ttf in Resources */,
 				CD487B6328A3D3AD00465F5A /* Nunito-Black.ttf in Resources */,
+				CDBDB17328A4FCDB007CF653 /* FontAwesome5_Brands.ttf in Resources */,
 				CD487B6528A3D3AD00465F5A /* PaytoneOne-Regular.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				CDBDB17128A4FCDB007CF653 /* FontAwesome5_Regular.ttf in Resources */,
+				CDBDB17528A4FCDB007CF653 /* Ionicons.ttf in Resources */,
 				CD487B6228A3D3AD00465F5A /* OxygenMono-Regular.ttf in Resources */,
 				CD487B6828A3D3AD00465F5A /* Nunito-Light.ttf in Resources */,
 				CD487B6A28A3D64C00465F5A /* GoogleService-Info.plist in Resources */,

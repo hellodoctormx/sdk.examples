@@ -1,12 +1,15 @@
 import type {ReactElement} from 'react';
 import React, {createContext, useContext, useEffect, useState} from 'react';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
 import {navigationRef} from './app/utils/navigation';
-import HomeScreen from './app/screens/home.screen';
-import VideoCallScreen from './app/screens/video.screen';
 import {teardownNotifications} from './app/notifications';
 import {CurrentUser} from './app/types';
+import {signIn} from './app/services/user.service';
+import HomeScreen from './app/screens/home.screen';
+import VideoCallScreen from './app/screens/video.screen';
 
 const AppStack = createNativeStackNavigator();
 
@@ -25,10 +28,19 @@ export default function App(): ReactElement {
     const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
     useEffect(() => {
+        const authStateSubscriber = auth().onAuthStateChanged(registerAuthStateListener);
+
         return () => {
+            authStateSubscriber();
             teardownApp().catch((error) => console.error('[App:useEffect:teardownApp]', error));
         };
     }, []);
+
+    function registerAuthStateListener(user: FirebaseAuthTypes.User | undefined) {
+        if (user !== null) {
+            signIn().then(setCurrentUser);
+        }
+    }
 
     return (
         <NavigationContainer ref={navigationRef} >
