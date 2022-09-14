@@ -6,16 +6,13 @@ import notifee from '@notifee/react-native';
 import {name as appName} from '../../app.json';
 import * as rootNavigation from './navigation';
 import {navigateToHome} from './navigation';
-import {setInitialNavigation} from '../notifications';
 import {getDeviceSnapshot} from './device';
 import {bootstrapUser, getCurrentUser} from '../services/user.service';
 import {API_KEY, HELLO_DOCTOR_API_HOST} from '../../app.config.js';
 
-let _didNavigateToVideoCall = false;
-
 export async function configureHelloDoctorSDK(): Promise<void> {
     const currentUser = getCurrentUser();
-    console.debug("[configureHelloDoctorSDK]", {currentUser});
+
     const config = {
         apiKey: API_KEY,
         appName: appName,
@@ -43,21 +40,20 @@ export async function handleIncomingVideoCallNotification(
     callerDisplayName: string,
     callerPhotoURL: string,
     consultationID: string,
-) {
+): Promise<void> {
     if (Platform.OS === 'android') {
         await bootstrapUser();
 
         await RNHelloDoctor.handleIncomingVideoCallNotification({
             videoRoomSID,
+            consultationID,
             callerDisplayName,
             callerPhotoURL,
         });
-
-        setInitialNavigation('Consultation', {consultationID});
     }
 }
 
-export async function handleVideoCallEndedNotification(videoRoomSID: string) {
+export async function handleVideoCallEndedNotification(videoRoomSID: string): Promise<void> {
     try {
         await RNHelloDoctor.handleVideoCallEndedNotification(videoRoomSID);
     } catch (error: any) {
@@ -73,18 +69,7 @@ export async function handleVideoCallEndedNotification(videoRoomSID: string) {
     }
 }
 
-export function checkDidNavigateToVideoCall() {
-    return _didNavigateToVideoCall;
-}
-
-export function setDidNavigateToVideoCall(didNavigateToVideoCall: boolean) {
-    _didNavigateToVideoCall = didNavigateToVideoCall;
-}
-
-export async function navigateToVideoCall(consultationID: string, videoRoomSID: string) {
-    console.debug('[navigateToVideoCall]', {consultationID, videoRoomSID});
-    setDidNavigateToVideoCall(true);
-
+export async function navigateToVideoCall(consultationID: string, videoRoomSID: string): Promise<void> {
     const accessToken = await RNHelloDoctor.getVideoCallAccessToken(videoRoomSID);
 
     rootNavigation.navigate('VideoCall', {

@@ -1,18 +1,18 @@
-import {Consultation} from '@hellodoctor/react-native-sdk/lib/types';
+import {Consultation} from '@hellodoctor/react-native-sdk';
 import moment from 'moment';
 import {HelloDoctorColors} from '../../../../react-native/lib/ui/theme';
 import _ from 'lodash';
 
 export type ConsultationNotice = {
-    id: string
-    importance: ConsultationNoticeImportance
-    asserts: (consultation: Consultation) => boolean
-    title?: string
-    description: string
-    color: string
-    status?: string
-    icon?: string
-    Action?: () => JSX.Element
+    id: string;
+    importance: ConsultationNoticeImportance;
+    asserts: (consultation: Consultation) => boolean;
+    title?: string;
+    description: string;
+    color: string;
+    status?: string;
+    icon?: string;
+    Action?: () => JSX.Element;
 }
 
 enum ConsultationNoticeImportance {

@@ -1,7 +1,8 @@
-import notifee, {EventType} from '@notifee/react-native';
+import notifee, {EventType, Event} from '@notifee/react-native';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import {RNHelloDoctor} from '@hellodoctor/react-native-sdk';
+
 import {
     handleIncomingVideoCallNotification,
     handleVideoCallEndedNotification,
@@ -11,10 +12,7 @@ import {
 let isSubscribed = false;
 let onForegroundEventSubscription = null;
 
-let initialNavigationScreen = null;
-let initialNavigationParams = null;
-
-export function bootstrapNotifications() {
+export function bootstrapNotifications(): void {
     if (isSubscribed) {
         return;
     }
@@ -26,7 +24,7 @@ export function bootstrapNotifications() {
     messaging().onMessage(onMessageReceived);
 }
 
-export function teardownNotifications() {
+export function teardownNotifications(): void {
     if (onForegroundEventSubscription !== null) {
         onForegroundEventSubscription();
         onForegroundEventSubscription = null;
@@ -40,7 +38,7 @@ export function teardownNotifications() {
 }
 
 
-export async function onMessageReceived(message) {
+export async function onMessageReceived(message): Promise<void> {
     const {currentUser} = auth();
 
     if (!currentUser) {
@@ -52,18 +50,16 @@ export async function onMessageReceived(message) {
     const {data} = message;
 
     // Set the message's notification as the default to allow server-side notifications
-    let notification = message.notification;
+    const notification = message.notification;
 
     try {
         switch (data?.type) {
         case 'incomingVideoCall':
-            let {videoRoomSID, callerDisplayName, callerPhotoURL, consultationID} =
-                    data;
             await handleIncomingVideoCallNotification(
-                videoRoomSID,
-                callerDisplayName,
-                callerPhotoURL,
-                consultationID,
+                data.videoRoomSID,
+                data.callerDisplayName,
+                data.callerPhotoURL,
+                data.consultationID,
             );
             return;
         case 'videoCallEnded':
@@ -92,88 +88,53 @@ function registerForegroundEventHandlers() {
         return;
     }
 
-    onForegroundEventSubscription = notifee.onForegroundEvent(event => {
-        if (!isSubscribed) {
-            return;
-        }
-
-        console.info('[notifications:onForegroundEvent]', event);
-
-        const {type, detail} = event;
-
-        switch (type) {
-        case EventType.DISMISSED:
-            switch (detail.notification.data?.type) {
-            case 'incomingVideoCall':
-                RNHelloDoctor.handleIncomingVideoCallNotificationRejected();
-                break;
-            }
-            break;
-        case EventType.ACTION_PRESS:
-            const {pressAction, notification} = detail;
-
-            const {data} = notification;
-
-            switch (pressAction.id) {
-            case 'reject':
-                RNHelloDoctor.handleIncomingVideoCallNotificationRejected();
-                break;
-            case 'answer':
-                navigateToVideoCall(data.consultationID, data.videoRoomSID)
-                    .catch(error => console.error(`error navigating to video call: ${error}`));
-                break;
-            }
-        }
-    });
+    onForegroundEventSubscription = notifee.onForegroundEvent(handleNotificationEvent);
 }
 
-export function registerBackgroundEventHandlers() {
+export function registerBackgroundEventHandlers(): void {
     console.info('registering background event handler');
 
     messaging().setBackgroundMessageHandler(async message => {
         onMessageReceived(message).catch(error => console.error(error));
     });
 
-    notifee.onBackgroundEvent(async event => {
-        if (!auth().currentUser) {
-            return;
-        }
-
-        console.info('[notifications:onBackgroundEvent]', {event});
-
-        const {type, detail} = event;
-        const {notification} = detail;
-
-        switch (type) {
-        case EventType.DISMISSED:
-            switch (detail.notification.data?.type) {
-            case 'incomingVideoCall':
-                RNHelloDoctor.handleIncomingVideoCallNotificationRejected();
-                break;
-            }
-            break;
-        case EventType.ACTION_PRESS:
-            const {pressAction} = detail;
-
-            switch (pressAction.id) {
-            case 'answer':
-                console.debug('[onBackgroundEvent:ACTION_PRESS:answer]');
-                // acceptIncomingVideoCall(data.consultationID, data.videoRoomSID).catch(error => logError(`error accepting incoming call: ${error}`));
-                break;
-            case 'reject':
-                RNHelloDoctor.handleIncomingVideoCallNotificationRejected();
-                break;
-            }
-        }
-
-        // Remove the notification
-        await notifee.cancelNotification(notification.id);
-    });
+    notifee.onBackgroundEvent(handleNotificationEvent);
 }
 
+async function handleNotificationEvent(event: Event): Promise<void> {
+    if (!auth().currentUser) {
+        return;
+    }
 
-export function setInitialNavigation(screen, params) {
-    console.debug('[setInitialNavigation]', {screen});
-    initialNavigationScreen = screen;
-    initialNavigationParams = params;
+    console.info('[notifications:onForegroundEvent]', event);
+
+    const {type, detail} = event;
+    const {notification} = detail;
+
+    switch (type) {
+    case EventType.DISMISSED:
+        switch (detail.notification.data?.type) {
+        case 'incomingVideoCall':
+            RNHelloDoctor.handleIncomingVideoCallNotificationRejected();
+            break;
+        }
+        break;
+    case EventType.ACTION_PRESS:
+        switch (detail.pressAction.id) {
+        case 'reject':
+            RNHelloDoctor.handleIncomingVideoCallNotificationRejected();
+            break;
+        case 'answer':
+            navigateToVideoCall(
+                notification.data.consultationID,
+                notification.data.videoRoomSID
+            ).catch(error => console.error(`error navigating to video call: ${error}`));
+            break;
+        }
+    }
+
+    // Remove the notification
+    notifee.cancelNotification(notification.id).catch((error) => {
+        console.warn(`error cancelling notification ${notification.id}`, error);
+    });
 }
