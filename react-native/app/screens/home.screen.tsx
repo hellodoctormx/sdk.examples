@@ -2,7 +2,7 @@ import * as React from 'react';
 import {createContext, ReactElement, useContext, useEffect, useState} from 'react';
 import {Alert, ScrollView, Text, View} from 'react-native';
 
-import {Consultation} from '@hellodoctor/react-native-sdk/dist/types';
+import {RNHelloDoctorTypes} from '@hellodoctor/react-native-sdk';
 import {HelloDoctorColors, HelloDoctorFonts, ThemeColors} from '@hellodoctor/react-native-sdk/dist/ui/theme';
 import Button from '@hellodoctor/react-native-sdk/dist/ui/components/Button';
 import CollapsibleView from '@hellodoctor/react-native-sdk/dist/ui/components/CollapsibleView';
@@ -10,15 +10,14 @@ import {ConsultationCard} from '@hellodoctor/react-native-sdk/dist/ui/components
 import {SchedulingContextProvider} from '@hellodoctor/react-native-sdk/dist/ui/scheduling/scheduling.context';
 import {SchedulingSection} from '@hellodoctor/react-native-sdk/dist/ui/scheduling/scheduling.components';
 
-import {HelloDoctorService} from '../services/hellodoctor.service';
 import {signIn, signOut} from '../services/user.service';
 import {useCurrentUserContext} from '../../App';
-
-const getConsultations = HelloDoctorService.getConsultations;
+import {RNHelloDoctor} from '@hellodoctor/react-native-sdk';
 
 type IHomeScreenContext = {
-    consultations: Array<Consultation>
-    setConsultations: (consultations: Array<Consultation>) => void
+    consultations: Array<RNHelloDoctorTypes.Consultation>
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setConsultations: (consultations: Array<RNHelloDoctorTypes.Consultation>) => void
 }
 
 const HomeScreenContext = createContext<Partial<IHomeScreenContext>>({
@@ -31,7 +30,7 @@ function useHomeScreenContext() {
 }
 
 export default function HomeScreenProvider(): ReactElement {
-    const [consultations, setConsultations] = useState<Array<Consultation>>([]);
+    const [consultations, setConsultations] = useState<Array<RNHelloDoctorTypes.Consultation>>([]);
 
     return (
         <HomeScreenContext.Provider value={{consultations, setConsultations}}>
@@ -50,7 +49,7 @@ function HomeScreen(): ReactElement {
 
     useEffect(() => {
         if (currentUser !== undefined) {
-            getConsultations(3).then(setConsultations);
+            RNHelloDoctor.consultations.getConsultations(3).then(setConsultations);
         }
     }, [currentUser]);
 
@@ -98,17 +97,14 @@ function HomeScreen(): ReactElement {
                                 'Your consultation was scheduled successfully',
                             );
 
-                            const freshConsultations = await getConsultations(3);
+                            const freshConsultations = await RNHelloDoctor.consultations.getConsultations(3);
                             setConsultations(freshConsultations);
                         }}
                         onRequestConsultationError={(error) => {
                             console.error('[onRequestConsultationError]', error);
                         }}
                     />
-                    <CollapsibleView
-                        isCollapsed={!didRequestConsultation}
-                        style={{alignItems: 'center'}}>
-                        {/*<Icon name={'check'} size={22} color={HelloDoctorColors.Green500}/>*/}
+                    <CollapsibleView isCollapsed={!didRequestConsultation} style={{alignItems: 'center'}}>
                         <Text
                             style={{
                                 fontFamily: HelloDoctorFonts.TextBold,

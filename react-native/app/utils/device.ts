@@ -4,7 +4,7 @@ import messaging from '@react-native-firebase/messaging';
 
 import {UserDevice} from '../types';
 
-export async function registerDevice() {
+export async function registerDevice(): Promise<void> {
     try {
         await getDeviceSnapshot();
     } catch (error) {
@@ -36,7 +36,7 @@ async function doRegisterDevice() {
     await newUserDeviceRef.set(newUserDevice);
 }
 
-export async function getDeviceSnapshot() {
+export async function getDeviceSnapshot(): Promise<FirebaseFirestoreTypes.DocumentSnapshot> {
     const {currentUser} = auth();
 
     if (currentUser === null) {

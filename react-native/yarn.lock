@@ -885,9 +885,9 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@hellodoctor/react-native-sdk@../../react-native/hellodoctor-react-native-sdk-0.7.0alpha2.tgz":
-  version "0.7.0-alpha2"
-  resolved "../../react-native/hellodoctor-react-native-sdk-0.7.0alpha2.tgz#97ac91c4a5e816e956ff178b89bd1f8c1a36c63d"
+"@hellodoctor/react-native-sdk@../../react-native/hellodoctor-react-native-sdk-0.7.0alpha5.tgz":
+  version "0.7.0-alpha5"
+  resolved "../../react-native/hellodoctor-react-native-sdk-0.7.0alpha5.tgz#738f0133debc64481b1b1fc07c1b96792ddc9113"
   dependencies:
     "@react-native-async-storage/async-storage" "^1.17.1"
     "@react-navigation/native" "^5.9.2"

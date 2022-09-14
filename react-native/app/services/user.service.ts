@@ -4,13 +4,13 @@ import firestore from '@react-native-firebase/firestore';
 import {CurrentUser} from '../types';
 import ExampleAppHTTPClient from './http.service';
 import {registerDevice} from '../utils/device';
-import {configureHelloDoctorSDK} from '../utils/helloDoctorHelper';
+import {configureHelloDoctorSDK} from './hellodoctor.service';
 import {bootstrapNotifications} from '../notifications';
 import messaging from '@react-native-firebase/messaging';
 
 let currentUser: CurrentUser;
 
-export function getCurrentUser() {
+export function getCurrentUser(): CurrentUser {
     return currentUser;
 }
 

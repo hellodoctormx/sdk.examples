@@ -49,11 +49,11 @@ export default class ExampleAppHTTPClient {
 
 }
 
-export const nullSafeJsonResponse = (response: Response) => {
+export function nullSafeJsonResponse(response: Response) {
     if (response.status < 200 || response.status >= 300) {
         console.warn(`[Http.nullSafeJsonResponse:BAD_STATUS:${response.status}]`, response);
         throw new Error(response.statusText);
     }
 
     return response.json();
-};
+}

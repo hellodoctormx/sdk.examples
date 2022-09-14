@@ -1,6 +1,6 @@
 import React, {ReactElement, useEffect, useState} from 'react';
 import {Modal} from 'react-native';
-import {HDVideoCall} from '@hellodoctor/react-native-sdk';
+import {RNHelloDoctorVideo} from '@hellodoctor/react-native-sdk';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
@@ -25,10 +25,9 @@ export default function VideoCallScreen(props): ReactElement {
 
     return (
         <Modal visible={!didEndVideoCall}>
-            <HDVideoCall
+            <RNHelloDoctorVideo.VideoCall
                 accessToken={accessToken}
                 videoRoomSID={videoRoomSID}
-                onEndCall={handleOnEndCall}
             />
         </Modal>
     );

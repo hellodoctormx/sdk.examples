@@ -1,13 +1,13 @@
-import notifee, {EventType, Event} from '@notifee/react-native';
+import notifee, {Event, EventType} from '@notifee/react-native';
 import auth from '@react-native-firebase/auth';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 import {RNHelloDoctor} from '@hellodoctor/react-native-sdk';
 
 import {
     handleIncomingVideoCallNotification,
     handleVideoCallEndedNotification,
     navigateToVideoCall,
-} from './utils/helloDoctorHelper';
+} from './services/hellodoctor.service';
 
 let isSubscribed = false;
 let onForegroundEventSubscription = null;
@@ -37,15 +37,10 @@ export function teardownNotifications(): void {
         .catch(error => console.warn(`error unregistering FCM: ${error}`));
 }
 
-
-export async function onMessageReceived(message): Promise<void> {
-    const {currentUser} = auth();
-
-    if (!currentUser) {
+export async function onMessageReceived(message: FirebaseMessagingTypes.RemoteMessage): Promise<void> {
+    if (auth().currentUser === null) {
         return;
     }
-
-    console.info('[notifications:onMessageReceived]', message);
 
     const {data} = message;
 
@@ -68,15 +63,13 @@ export async function onMessageReceived(message): Promise<void> {
         }
 
         if (!notification) {
-            console.info(
-                '[onMessageReceived] returning without displaying notification: no notification available',
-            );
             return;
         }
 
-        notifee
-            .displayNotification(notification)
-            .catch(error => console.error(`error displaying notification: ${error}`));
+        // @ts-ignore
+        notifee.displayNotification(notification).catch((error) => {
+            console.error(`error displaying notification: ${error}`);
+        });
     } catch (error) {
         console.error(`[onMessageReceived] error: ${error}`);
     }
@@ -106,8 +99,6 @@ async function handleNotificationEvent(event: Event): Promise<void> {
         return;
     }
 
-    console.info('[notifications:onForegroundEvent]', event);
-
     const {type, detail} = event;
     const {notification} = detail;
 
@@ -115,14 +106,18 @@ async function handleNotificationEvent(event: Event): Promise<void> {
     case EventType.DISMISSED:
         switch (detail.notification.data?.type) {
         case 'incomingVideoCall':
-            RNHelloDoctor.handleIncomingVideoCallNotificationRejected();
+            RNHelloDoctor.video.handleIncomingVideoCallNotificationRejected().catch((error) => {
+                console.error(`[notifications:EventType.DISMISSED.incomingVideoCall:${notification.id}]`, error);
+            });
             break;
         }
         break;
     case EventType.ACTION_PRESS:
         switch (detail.pressAction.id) {
         case 'reject':
-            RNHelloDoctor.handleIncomingVideoCallNotificationRejected();
+            RNHelloDoctor.video.handleIncomingVideoCallNotificationRejected().catch((error) => {
+                console.error(`[notifications:EventType.ACTION_PRESS.reject:${notification.id}]`, error);
+            });
             break;
         case 'answer':
             navigateToVideoCall(
