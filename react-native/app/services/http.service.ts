@@ -1,5 +1,5 @@
 import auth from '@react-native-firebase/auth';
-import {API_HOST} from '../../app.config.js';
+import {API_HOST} from '../../app.config';
 
 export default class ExampleAppHTTPClient {
     async get(path: string) {
